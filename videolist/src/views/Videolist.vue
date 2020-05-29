@@ -41,10 +41,20 @@ export default {
       let type = await Axios.get('./user.json');
       for (let i = 0; i < type.data.type.length; i++) {
         const vlist = await Axios.get('./'+type.data.type[i].name+'.json');
-        tempvideolist = tempvideolist.concat(vlist.data);
+          for (let j = 0; j < vlist.data.length; j++) {
+              let flag = true;
+              for (let k = 0; k < tempvideolist.length; k++) {
+                  if(tempvideolist[k]['url'] === vlist.data[j]['url']){
+                      flag = false;
+                      break;
+                  }
+              }
+              if(flag){
+                  tempvideolist.push(vlist.data[j])
+              }
+          }
       }
       this.videolist = tempvideolist;
-      console.log(this.videolist)
     }
   },
   created(){
@@ -63,8 +73,13 @@ export default {
     padding-right:5px;
     padding-bottom: 15px;
   }
+  .row >.col-sm-6, .row >.col-md-4, .row >.col-lg-3, .row >.col-xl-2 {
+    padding-left:1px;
+    padding-right:1px;
+    padding-bottom: 15px;
+  }
   .card > .card-body{
-    padding: 0.4rem;
+    padding: 0.1rem;
   }
   a > h4{
     font-size: 0.8rem;
